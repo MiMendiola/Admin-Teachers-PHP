@@ -1,8 +1,27 @@
 import React from "react"
 import Back from "../common/back/Back"
+import $ from "jquery";
 import "./join.css"
 
 const Joinus = () => {
+  const createTeacherAccount = (ev) => {
+    ev.preventDefault();
+    let url = "https://finalproyect.com/"; //change this line and put the path for the other project
+
+    $.ajax({
+      type: "POST",
+      url: url+"adminController/ajax_newTeacher",
+      responseType: "json",
+      data: {"name": $("#name").val(), "last_name": $("#last_name").val(), "passport": $("#passport").val(),"typeUser": 3, "email": $("#email").val(), "pass": $("#pass").val(), "code": $("#code").val() },
+    }).then(res=>{
+      res = JSON.parse(res);
+      if(res.status == "ERROR"){
+        alert('An error has occurred the user has not been inserted '+res.message);
+      } else {
+        alert('New User was created.');
+      }
+    })
+  };
   return (
     <>
       <Back title='Be a teacher' />
@@ -38,7 +57,7 @@ const Joinus = () => {
                 <input type='email' name="email" id="email" placeholder='Email' />
               </div>
               <input type='password' name="pass" id="pass" placeholder='Password' />
-              <button className='primary-btn'>BE ONE OF US</button>
+              <button className='primary-btn' id='btn-newTeacher' onClick={(ev)=>createTeacherAccount(ev)}>BE ONE OF US</button>
             </form>
 
             <h3>Follow us here</h3>
